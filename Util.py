@@ -21,3 +21,16 @@ def isCacheInitialized(addr):
   """
   #return (cacheAddr[0] | cacheAddr[1]) != 0
   return (int.from_bytes(addr, byteorder='little') & 0x80000000) != 0
+
+
+def readNextOneBytesAsInt(data, offset):
+  return byteToInt(data[offset : offset + 1])
+
+def readNextTwoBytesAsInt(data, offset):
+  return byteToInt(data[offset : offset + 2])
+
+def readNextFourBytesAsInt(data, offset):
+  return byteToInt(data[offset : offset + 4])
+
+def readNextXBytes(data, offset, length):
+  return data[offset : offset + length]

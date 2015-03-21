@@ -11,7 +11,7 @@ import hashlib
 import shutil
 import logging
 
-from disk_format import *
+from manager import *
 
 
 def main():
