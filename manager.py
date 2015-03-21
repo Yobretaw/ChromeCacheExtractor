@@ -26,4 +26,7 @@ class CacheManager(object):
 
     if pathToDir:
       self.indexFile = Index(pathToIndex=os.path.join(pathToDir, "index"))
+      self.blockFiles[0] = Block(pathToBlock=os.path.join(pathToDir, "data_0"))
       self.blockFiles[1] = Block(pathToBlock=os.path.join(pathToDir, "data_1"))
+      self.blockFiles[2] = Block(pathToBlock=os.path.join(pathToDir, "data_2"))
+      self.blockFiles[3] = Block(pathToBlock=os.path.join(pathToDir, "data_3"))

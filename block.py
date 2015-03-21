@@ -90,12 +90,9 @@ class Block(object):
     return offset
 
   def readBlocks(self, data, startFromOffset=0):
-    block_idx = 0
-
+    blockIdx = 0
     for i in range(0, len(self.allocation_map)):
       for j in range(0, 32):
         if (self.allocation_map[i] & (1 << j)) != 0:
-          self.blocks[block_idx] = readNextXBytes(data, startFromOffset + self.entry_size * ((i >> 5) + j), self.entry_size)
-          block_idx += 1
-
-
+          blockIdx = (i << 5) + j
+          self.blocks[blockIdx] = readNextXBytes(data, startFromOffset + self.entry_size * blockIdx, self.entry_size)

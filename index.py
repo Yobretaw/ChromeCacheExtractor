@@ -25,30 +25,25 @@ kCurrentVersion = 0x20000
 class Index(object):
   def __init__(self, pathToIndex=None):
     self.header = None
-    self.table = None
-    self.data = None
-
-    if pathToIndex:
-      with open(pathToIndex, 'rb') as f:
-        self.data = f.read()
-
-      self.parse(self.data)
-      
-
-  def parse(self, data):
-    self.header = IndexHeader(headData=self.data)
     self.table = []
 
-    d = self.data
+    if pathToIndex:
+      data = None
+      with open(pathToIndex, 'rb') as f:
+        data = f.read()
+
+      self.header = IndexHeader(headData=data)
+      self.parseBody(data)
+      
+
+  def parseBody(self, data):
+    d = data
     l = self.header.table_len
     o = self.header.offset
 
-    #rawTable = [byteToInt(d[o+4*i:o+4*i+4]) for i in range(0, l + 4) if isCacheInitialized(d[o+4*i:o+4*i+4])]
-    rawTable = [readNextFourBytesAsInt(d, o+4*i) for i in range(0, l + 4) if isCacheInitialized(d[o+4*i: o+4*i+4])]
-
-
-    self.table = [CacheAddr(addr) for addr in rawTable]
-    print(self.table)
+    for i in range(0, l):
+      if isCacheInitialized(d[o+4*i:o+4*i+4]):
+        self.table.append(CacheAddr(readNextFourBytesAsInt(d, o+4*i)))
 
   def getEntry(self, index):
     return self.table[i]
@@ -106,5 +101,3 @@ class IndexHeader(object):
 class LruData(object):
   def __init__(self):
     pass
-
-
