@@ -18,7 +18,8 @@ def main():
   pathToDir = "/Users/youkeshen/Desktop/Cache/"
   pathToIndex = "/Users/youkeshen/Desktop/Cache/index"
 
-  #cm = CacheManager(pathToDir)
+  cm = CacheManager(pathToDir)
+  cm.processIndex()
 
 
 main()

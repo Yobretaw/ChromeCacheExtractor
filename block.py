@@ -96,3 +96,6 @@ class Block(object):
         if (self.allocation_map[i] & (1 << j)) != 0:
           blockIdx = (i << 5) + j
           self.blocks[blockIdx] = readNextXBytes(data, startFromOffset + self.entry_size * blockIdx, self.entry_size)
+
+  def getEntry(self, idx, count=1):
+    return self.blocks[idx:idx+count]
