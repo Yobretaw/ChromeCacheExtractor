@@ -35,6 +35,7 @@ class Block(object):
     self.user = [0] * 5
     self.allocation_map = [0] * int(kMaxBlocks >> 5)
 
+    self.offset_block_start = 0
     self.blocks = [None] * (len(self.allocation_map) << 5)
 
     if pathToBlock:
@@ -42,10 +43,11 @@ class Block(object):
       with open(pathToBlock, "rb") as f:
         self.data = f.read()
 
-      offset = self.parseHeader(self.data)
-      self.readBlocks(self.data, startFromOffset=offset)
+      offset = self.parseHeader()
+      self.parseBitmap(startFromOffset=offset)
 
-  def parseHeader(self, data):
+  def parseHeader(self):
+    data = self.data
     offset = 0
     self.magic = readNextFourBytesAsInt(data, offset)
     offset += 4
@@ -87,15 +89,22 @@ class Block(object):
       self.allocation_map[i] = readNextFourBytesAsInt(data, offset)
       offset += 4
 
+    self.offset_block_start = offset
     return offset
 
-  def readBlocks(self, data, startFromOffset=0):
+  def parseBitmap(self, startFromOffset=0):
     blockIdx = 0
+    offset = startFromOffset
     for i in range(0, len(self.allocation_map)):
       for j in range(0, 32):
         if (self.allocation_map[i] & (1 << j)) != 0:
-          blockIdx = (i << 5) + j
-          self.blocks[blockIdx] = readNextXBytes(data, startFromOffset + self.entry_size * blockIdx, self.entry_size)
+          self.blocks[blockIdx] = self.data[offset:offset + self.entry_size]
+        blockIdx += 1
+        offset += self.entry_size
+
 
   def getEntry(self, idx, count=1):
     return self.blocks[idx:idx+count]
+
+  def readBlocks(self, blockIdx, count):
+    return readNextXBytes(self.data, self.offset_block_start + self.entry_size * blockIdx, self.entry_size * count)

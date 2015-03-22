@@ -72,6 +72,9 @@ class CacheAddr(object):
 
 
   def file_typeToString(self):
+    if self.file_type < 0 or self.file_type > 4:
+      return "Unknown file type"
+
     return {
       0: "separate file",
       1: "ranking block-file",

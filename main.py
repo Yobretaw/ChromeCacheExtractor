@@ -22,4 +22,9 @@ def main():
   cm.processIndex()
 
 
+
 main()
+
+#from urllib.parse import urlparse
+
+#print(urlparse("http://pos.baidu.com/wh/o.htm?ltr=http%3A%2F%2Ffitness.39.net%2Fspecial%2Fqtjs%2Findex.html&cf=u"))

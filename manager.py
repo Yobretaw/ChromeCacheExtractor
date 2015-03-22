@@ -22,7 +22,7 @@ class CacheManager(object):
     self.pathToDir = pathToDir
     self.indexFile = None;
     self.blockFiles = [None] * 4;   # data_0, data_1, data_2, data_3
-    self.separateFiles = []
+    self.separateFiles = {}
 
     self.entries = []
 
@@ -33,20 +33,30 @@ class CacheManager(object):
       self.blockFiles[2] = Block(pathToBlock=os.path.join(pathToDir, "data_2"))
       self.blockFiles[3] = Block(pathToBlock=os.path.join(pathToDir, "data_3"))
 
+      separate_files = [name for name in os.listdir(pathToDir) if os.path.isfile(os.path.join(pathToDir, name)) and name[0] == 'f']
+      for fname in separate_files:
+        with open(os.path.join(pathToDir, fname), 'rb') as tmp:
+          print(fname)
+          self.separateFiles[fname] = tmp.read()
+
   def processIndex(self):
     assert(self.indexFile.table)
 
     for addr in self.indexFile.table:
-      self.entries.append(EntryStore(self.fetchBytesForEntry(addr)))
+      entry = EntryStore(self.fetchBytesForEntry(addr), self)
+      self.entries.append(entry)
 
+      if entry.next_addr:
+        self.indexFile.table.append(CacheAddr(entry.next_addr))
 
   def fetchBytesForEntry(self, addr):
-    if addr.contiguous_blocks > 0:
-      return None
-
     block_file = addr.block_file
     block_number = addr.block_number
     num_blocks = addr.contiguous_blocks + 1
-
+    
     entries = self.blockFiles[block_file].getEntry(block_number, num_blocks)
     return b"".join(entries)
+
+  def insertAddrToIndex(self, addr):
+    self.indexFile.table.append(CacheAddr(addr))
+
