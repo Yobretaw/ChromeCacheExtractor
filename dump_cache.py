@@ -112,10 +112,6 @@ class CacheDumper(object):
         first_dir, second_dir = key[0:1], key[1:2]
         dirpath = os.path.join(self.pathToDir, first_dir, second_dir, key)
         filepath = None
-        #if isHeader:
-        #  filepath = os.path.join(dirpath, "headers.txt")
-        #else:
-        #  filepath = os.path.join(dirpath, "content" + ext if ext else "")
         filepath = os.path.join(dirpath, "header.txt" if isHeader else ("content" + ext if ext else "content"))
         print(filepath)
         return key, dirpath, filepath
