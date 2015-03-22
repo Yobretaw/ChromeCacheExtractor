@@ -36,7 +36,6 @@ class CacheManager(object):
       separate_files = [name for name in os.listdir(pathToDir) if os.path.isfile(os.path.join(pathToDir, name)) and name[0] == 'f']
       for fname in separate_files:
         with open(os.path.join(pathToDir, fname), 'rb') as tmp:
-          print(fname)
           self.separateFiles[fname] = tmp.read()
 
   def processIndex(self):

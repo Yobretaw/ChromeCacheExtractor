@@ -39,3 +39,23 @@ def readNextXBytes(data, offset, length):
 
 def getExt(url):
   arr = urlparse(url)
+
+def parseHTTPHeaders(text):
+  text = text
+
+  startPos = text.find(b'HTTP')
+  endPos = text.find(b'\x00\x00', startPos)
+  
+  if not startPos:
+    return None
+  
+  text = text[startPos:endPos].decode('utf-8')
+  lineStr = text.split('\0')
+  m = {}
+  for line in lineStr:
+    kvp = line.split(':')
+    m[kvp[0]] = kvp[1] if len(kvp) > 1 else ''
+
+  return lineStr, m
+
+
