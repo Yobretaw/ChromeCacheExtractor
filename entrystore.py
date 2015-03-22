@@ -131,8 +131,6 @@ class EntryStore(object):
     self.payload = self.data[1] if len(self.data) > 1 else None
 
     self.response_header, self.headerMap = parseHTTPHeaders(self.data[0])
-    print(self.headerMap)
-    
 
   def handleLongKey(self):
     assert(self.long_key != 0)
@@ -140,3 +138,4 @@ class EntryStore(object):
     addr = CacheAddr(self.long_key)
     keyData = self.manager.fetchBytesForEntry(addr)[0:self.key_len]
     self.key = keyData.decode('utf-8')
+

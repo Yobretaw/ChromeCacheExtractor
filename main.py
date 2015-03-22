@@ -15,11 +15,12 @@ from manager import *
 
 
 def main():
-  pathToDir = "/Users/youkeshen/Desktop/Cache/"
-  pathToIndex = "/Users/youkeshen/Desktop/Cache/index"
+  fromDir = "/Users/youkeshen/Desktop/Cache/"
+  toDir = "/Users/youkeshen/Desktop/Results/"
 
-  cm = CacheManager(pathToDir)
-  cm.processIndex()
+  cm = CacheManager(fromDir, toDir)
+  cm.processEntries()
+  cm.outputToFiles()
 
 
 

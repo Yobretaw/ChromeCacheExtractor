@@ -12,6 +12,7 @@ import shutil
 import logging
 
 from urllib.parse import urlparse
+from MimeExt import *
 
 def byteToInt(b):
   return int.from_bytes(b, byteorder='little')
@@ -37,8 +38,18 @@ def readNextFourBytesAsInt(data, offset):
 def readNextXBytes(data, offset, length):
   return data[offset : offset + length]
 
-def getExt(url):
-  arr = urlparse(url)
+def getExt(url, header):
+  path = urlparse(url)[2]
+
+  extFromUrl = path.split('.')[-1]
+  extFromMimeType = mimeToExt.get(header.get('Content-Type'))
+
+  if extToMime.get(extFromUrl):
+    return "." + extFromUrl
+  elif extFromMimeType:
+    return "." + extFromMimeType
+  else:
+    return ""
 
 def parseHTTPHeaders(text):
   text = text
@@ -54,7 +65,7 @@ def parseHTTPHeaders(text):
   m = {}
   for line in lineStr:
     kvp = line.split(':')
-    m[kvp[0]] = kvp[1] if len(kvp) > 1 else ''
+    m[kvp[0].strip()] = kvp[1].strip() if len(kvp) > 1 else ''
 
   return lineStr, m
 
