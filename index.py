@@ -33,19 +33,19 @@ class Index(object):
                 data = f.read()
 
             self.header = IndexHeader(headData=data)
-            self.parseBody(data)
+            self.parse_body(data)
 
 
-    def parseBody(self, data):
+    def parse_body(self, data):
         d = data
         l = self.header.table_len
         o = self.header.offset
 
         for i in range(0, l):
-            if isCacheInitialized(d[o+4*i:o+4*i+4]):
-                self.table.append(CacheAddr(readNextFourBytesAsInt(d, o+4*i)))
+            if is_cache_initialized(d[o+4*i:o+4*i+4]):
+                self.table.append(CacheAddr(read_next_four_byte_as_int(d, o+4*i)))
 
-    def getEntry(self, index):
+    def get_entry(self, index):
         return self.table[i]
 
 
@@ -71,27 +71,27 @@ class IndexHeader(object):
 
     def parse(self, data):
         offset = 0
-        self.magic = readNextFourBytesAsInt(data, offset)
+        self.magic = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.version = readNextFourBytesAsInt(data, offset)
+        self.version = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.num_entries = readNextFourBytesAsInt(data, offset)
+        self.num_entries = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.num_bytes = readNextFourBytesAsInt(data, offset)
+        self.num_bytes = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.last_file = readNextFourBytesAsInt(data, offset)
+        self.last_file = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.this_id = readNextFourBytesAsInt(data, offset)
+        self.this_id = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.stats = readNextFourBytesAsInt(data, offset)
+        self.stats = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.table_len = readNextFourBytesAsInt(data, offset)
+        self.table_len = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.crash = readNextFourBytesAsInt(data, offset)
+        self.crash = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.experiment = readNextFourBytesAsInt(data, offset)
+        self.experiment = read_next_four_byte_as_int(data, offset)
         offset += 4
-        self.create_time = byteToInt(data[offset:offset+8])
+        self.create_time = byte_to_int(data[offset:offset+8])
         offset += 8
 
         # ignore LruData

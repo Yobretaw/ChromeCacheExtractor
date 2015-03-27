@@ -17,7 +17,7 @@ import struct
 import urlparse
 from MimeExt import *
 
-def byteToInt(b):
+def byte_to_int(b):
     #return int.from_bytes(b, byteorder='little')
     if len(b) == 1:
         return ord(struct.unpack("<c", b))[0]
@@ -28,27 +28,27 @@ def byteToInt(b):
 
 
 
-def isCacheInitialized(addr):
+def is_cache_initialized(addr):
     """
       Cache address is initialized if the first bit is set
     """
     #return (int.from_bytes(addr, byteorder='little') & 0x80000000) != 0
-    return (byteToInt(addr) & 0x80000000) != 0
+    return (byte_to_int(addr) & 0x80000000) != 0
 
 
-def readNextOneBytesAsInt(data, offset):
-    return byteToInt(data[offset : offset + 1])
+def read_next_one_bytes_as_int(data, offset):
+    return byte_to_int(data[offset : offset + 1])
 
-def readNextTwoBytesAsInt(data, offset):
-    return byteToInt(data[offset : offset + 2])
+def read_next_two_bytes_as_int(data, offset):
+    return byte_to_int(data[offset : offset + 2])
 
-def readNextFourBytesAsInt(data, offset):
-    return byteToInt(data[offset : offset + 4])
+def read_next_four_byte_as_int(data, offset):
+    return byte_to_int(data[offset : offset + 4])
 
-def readNextXBytes(data, offset, length):
+def read_next_x_bytes(data, offset, length):
     return data[offset : offset + length]
 
-def getExt(url, header):
+def get_extension(url, header):
     path = urlparse.urlparse(url)[2]
 
     contentType = None
@@ -70,7 +70,7 @@ def getExt(url, header):
     else:
         return ""
 
-def parseHTTPHeaders(text):
+def parse_http_headers(text):
     text = text
 
     startPos = text.find(b'HTTP')

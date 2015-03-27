@@ -59,19 +59,19 @@ class CacheAddr(object):
         if self.file_type == 0:
             output += """Init: {0}\nFile Type: {1}\nFile Number: {2}\n""".format(
                 self.init,
-                self.file_typeToString(),
+                self.filetype_to_string(),
                 self.file_number)
         else:
             output += """Init: {0}\nFile Type: {1}\nContiguous Blocks: {2}\nBlock File: {3}\nBlock Number: {4}\n""".format(
                 self.init,
-                self.file_typeToString(),
+                self.filetype_to_string(),
                 self.contiguous_blocks,
                 self.block_file,
                 self.block_number)
         return output
 
 
-    def file_typeToString(self):
+    def filetype_to_string(self):
         if self.file_type < 0 or self.file_type > 4:
             return "Unknown file type"
 

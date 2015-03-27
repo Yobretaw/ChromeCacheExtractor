@@ -41,17 +41,17 @@ class CacheManager(object):
                 with open(os.path.join(fromDir, fname), 'rb') as tmp:
                     self.separateFiles[fname] = tmp.read()
 
-    def processEntries(self):
+    def process_entries(self):
         assert(self.indexFile.table)
 
         for addr in self.indexFile.table:
-            entry = EntryStore(self.fetchBytesForEntry(addr), self)
+            entry = EntryStore(self.fetch_bytes(addr), self)
             self.entries.append(entry)
 
             if entry.next_addr:
                 self.indexFile.table.append(CacheAddr(entry.next_addr))
 
-    def outputToFiles(self):
+    def output_to_files(self):
         dumper = CacheDumper(self.toDir)
         dumper.init()
 
@@ -61,7 +61,7 @@ class CacheManager(object):
                 continue
 
             url = entry.key.encode('utf-8')
-            ext = getExt(entry.key, entry.headerMap)
+            ext = get_extension(entry.key, entry.headerMap)
             dumper.insert(url, '\n'.join(entry.response_header), isHeader=True)
 
             if len(entry.data) > 1:
@@ -77,14 +77,14 @@ class CacheManager(object):
                 dumper.insert(url, entry.data[1], ext=ext)
 
 
-    def fetchBytesForEntry(self, addr):
+    def fetch_bytes(self, addr):
         block_file = addr.block_file
         block_number = addr.block_number
         num_blocks = addr.contiguous_blocks + 1
 
-        entries = self.blockFiles[block_file].getEntry(block_number, num_blocks)
+        entries = self.blockFiles[block_file].get_entry(block_number, num_blocks)
         return b"".join(entries)
 
-    def insertAddrToIndex(self, addr):
+    def insert_addr_to_index(self, addr):
         self.indexFile.table.append(CacheAddr(addr))
 

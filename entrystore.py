@@ -51,62 +51,62 @@ class EntryStore(object):
     def parse(self, data):
         offset = 0
 
-        self.key_hash = readNextFourBytesAsInt(data, offset)
+        self.key_hash = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.next_addr = readNextFourBytesAsInt(data, offset)
+        self.next_addr = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.rankings_node = readNextFourBytesAsInt(data, offset)
+        self.rankings_node = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.reuse_count = readNextFourBytesAsInt(data, offset)
+        self.reuse_count = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.refetch_count = readNextFourBytesAsInt(data, offset)
+        self.refetch_count = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.state = readNextFourBytesAsInt(data, offset)
+        self.state = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.creation_time = byteToInt(readNextXBytes(data, offset, 8))
+        self.creation_time = byte_to_int(read_next_x_bytes(data, offset, 8))
         offset += 8
 
-        self.key_len = readNextFourBytesAsInt(data, offset)
+        self.key_len = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.long_key = readNextFourBytesAsInt(data, offset)
+        self.long_key = read_next_four_byte_as_int(data, offset)
         offset += 4
 
         for i in range(0, len(self.data_size)):
-            self.data_size[i] = readNextFourBytesAsInt(data, offset)
+            self.data_size[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
         for i in range(0, len(self.data_addr)):
-            self.data_addr[i] = readNextFourBytesAsInt(data, offset)
+            self.data_addr[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
-        self.flags = readNextFourBytesAsInt(data, offset)
+        self.flags = read_next_four_byte_as_int(data, offset)
         offset += 4
 
         for i in range(0, len(self.pad)):
-            self.pad[i] = readNextFourBytesAsInt(data, offset)
+            self.pad[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
-        self.self_hash = readNextFourBytesAsInt(data, offset)
+        self.self_hash = read_next_four_byte_as_int(data, offset)
         offset += 4
 
         if self.long_key == 0:
-            self.key = readNextXBytes(data, offset, self.key_len).decode('utf-8')
+            self.key = read_next_x_bytes(data, offset, self.key_len).decode('utf-8')
         else:
-            self.handleLongKey()
+            self.handle_longkey()
 
         offset += max(256 - 4 * 24, self.key_len)
 
         if self.key != None and len(self.key) > 0:
-            self.loadData()
+            self.load_data()
 
-    def loadData(self):
+    def load_data(self):
         for address, size in zip(self.data_addr, self.data_size):
 
             if address == 0:
@@ -119,7 +119,7 @@ class EntryStore(object):
                 block_number = cacheAddr.block_number
                 contiguous_blocks = cacheAddr.contiguous_blocks
 
-                self.data.append(blockFile.readBlocks(block_number, contiguous_blocks + 1)[0:size])
+                self.data.append(blockFile.read_blocks(block_number, contiguous_blocks + 1)[0:size])
             elif cacheAddr.file_type == 0:
                 self.data.append(self.manager.separateFiles["f_"+"{0:06x}".format(cacheAddr.file_number)][0:size])
             else:
@@ -127,12 +127,12 @@ class EntryStore(object):
 
         self.payload = self.data[1] if len(self.data) > 1 else None
         if len(self.data) > 0:
-            self.response_header, self.headerMap = parseHTTPHeaders(self.data[0])
+            self.response_header, self.headerMap = parse_http_headers(self.data[0])
 
-    def handleLongKey(self):
+    def handle_longkey(self):
         assert(self.long_key != 0)
 
         addr = CacheAddr(self.long_key)
-        keyData = self.manager.fetchBytesForEntry(addr)[0:self.key_len]
+        keyData = self.manager.fetch_bytes(addr)[0:self.key_len]
         self.key = keyData.decode('utf-8')
 

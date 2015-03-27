@@ -19,8 +19,8 @@ def main():
     toDir = "/Users/youkeshen/Desktop/Results/"
 
     cm = CacheManager(fromDir, toDir)
-    cm.processEntries()
-    cm.outputToFiles()
+    cm.process_entries()
+    cm.output_to_files()
 
 
 

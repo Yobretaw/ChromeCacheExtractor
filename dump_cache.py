@@ -23,10 +23,10 @@ class CacheDumper(object):
 
 
     def init(self):
-        if not self.checkDir():
-            self.initDir()
+        if not self.check_dir():
+            self.init_dir()
 
-    def initDir(self):
+    def init_dir(self):
         """
             Generate cache directories
         """
@@ -48,7 +48,7 @@ class CacheDumper(object):
         print("Cache directories have been created successfully.")
 
 
-    def checkDir(self):
+    def check_dir(self):
         """
             Check if the cache directory alreay exists and has properly setup
             Return True if yes, otherwise return False
@@ -77,7 +77,7 @@ class CacheDumper(object):
         """
             Insert entry to cache, return true if new entry is written into cache, false otherwise
         """
-        key, dirpath, filepath = self.genPathFromUrl(url, isHeader, ext)
+        key, dirpath, filepath = self.get_path_from_url(url, isHeader, ext)
 
         if not os.path.exists(dirpath):
             os.makedirs(dirpath)
@@ -91,7 +91,7 @@ class CacheDumper(object):
 
 
     def fetch(self, url, isHeader=False):
-        key, dirpath, filepath = self.genPathFromUrl(url, isHeader)
+        key, dirpath, filepath = self.get_path_from_url(url, isHeader)
         if not os.path.exists(filepath):
             return None
 
@@ -101,7 +101,7 @@ class CacheDumper(object):
 
         return content
 
-    def genPathFromUrl(self, url, isHeader, ext):
+    def get_path_from_url(self, url, isHeader, ext):
         m = hashlib.md5();
         m.update(url)
         key = m.hexdigest()

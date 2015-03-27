@@ -43,56 +43,56 @@ class Block(object):
             with open(pathToBlock, "rb") as f:
                 self.data = f.read()
 
-            offset = self.parseHeader()
-            self.parseBitmap(startFromOffset=offset)
+            offset = self.parse_header()
+            self.parse_bitmap(startFromOffset=offset)
 
-    def parseHeader(self):
+    def parse_header(self):
         data = self.data
         offset = 0
-        self.magic = readNextFourBytesAsInt(data, offset)
+        self.magic = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.version = readNextFourBytesAsInt(data, offset)
+        self.version = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.this_file = readNextTwoBytesAsInt(data, offset)
+        self.this_file = read_next_two_bytes_as_int(data, offset)
         offset += 2
 
-        self.next_file = readNextTwoBytesAsInt(data, offset)
+        self.next_file = read_next_two_bytes_as_int(data, offset)
         offset += 2
 
-        self.entry_size = readNextFourBytesAsInt(data, offset)
+        self.entry_size = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.num_entries = readNextFourBytesAsInt(data, offset)
+        self.num_entries = read_next_four_byte_as_int(data, offset)
         offset += 4
 
-        self.max_entries = readNextFourBytesAsInt(data, offset)
+        self.max_entries = read_next_four_byte_as_int(data, offset)
         offset += 4
 
         for i in range(0, len(self.empty)):
-            self.empty[i] = readNextFourBytesAsInt(data, offset)
+            self.empty[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
         for i in range(0, len(self.hints)):
-            self.hints[i] = readNextFourBytesAsInt(data, offset)
+            self.hints[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
-        self.updating = readNextFourBytesAsInt(data, offset)
+        self.updating = read_next_four_byte_as_int(data, offset)
         offset += 4
 
         for i in range(0, len(self.user)):
-            self.user[i] = readNextFourBytesAsInt(data, offset)
+            self.user[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
         for i in range(0, len(self.allocation_map)):
-            self.allocation_map[i] = readNextFourBytesAsInt(data, offset)
+            self.allocation_map[i] = read_next_four_byte_as_int(data, offset)
             offset += 4
 
         self.offset_block_start = offset
         return offset
 
-    def parseBitmap(self, startFromOffset=0):
+    def parse_bitmap(self, startFromOffset=0):
         blockIdx = 0
         offset = startFromOffset
         for i in range(0, len(self.allocation_map)):
@@ -102,8 +102,8 @@ class Block(object):
                 blockIdx += 1
                 offset += self.entry_size
 
-    def getEntry(self, idx, count=1):
+    def get_entry(self, idx, count=1):
         return self.blocks[idx:idx+count]
 
-    def readBlocks(self, blockIdx, count):
-        return readNextXBytes(self.data, self.offset_block_start + self.entry_size * blockIdx, self.entry_size * count)
+    def read_blocks(self, blockIdx, count):
+        return read_next_x_bytes(self.data, self.offset_block_start + self.entry_size * blockIdx, self.entry_size * count)
