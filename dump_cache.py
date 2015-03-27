@@ -85,10 +85,7 @@ class CacheDumper(object):
             return False
 
         with open(filepath, 'wb') as tempfile:
-            if isinstance(content, str):
-              tempfile.write(bytes(content, 'utf-8'))
-            else:
-              tempfile.write(content)
+            tempfile.write(str(content))
 
         return True
 

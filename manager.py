@@ -10,6 +10,7 @@ import uuid
 import hashlib
 import shutil
 import logging
+import zlib
 
 from Util import *
 from addr import *
@@ -54,16 +55,25 @@ class CacheManager(object):
     dumper = CacheDumper(self.toDir)
     dumper.init()
 
+    count = 0
     for entry in self.entries:
       if len(entry.response_header) <= 1:
         continue
 
       url = entry.key.encode('utf-8')
-
       ext = getExt(entry.key, entry.headerMap)
       dumper.insert(url, '\n'.join(entry.response_header), isHeader=True)
 
       if len(entry.data) > 1:
+        contentEncoding = entry.headerMap.get('Content-Encoding')
+        if not contentEncoding:
+          contentEncoding = entry.headerMap.get('content-encoding')
+        if contentEncoding:
+          try:
+            entry.data[1] = zlib.decompress(entry.data[1], 16+zlib.MAX_WBITS)
+          except:
+            pass
+
         dumper.insert(url, entry.data[1], ext=ext)
 
 

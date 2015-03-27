@@ -121,15 +121,11 @@ class EntryStore(object):
 
         self.data.append(blockFile.readBlocks(block_number, contiguous_blocks + 1)[0:size])
       elif cacheAddr.file_type == 0:
-        offset = 0
-        self.data.append(self.manager.separateFiles["f_"+"{0:06x}".format(cacheAddr.file_number)][0:self.data_size[0]])
-        offset += self.data_addr[0]
-        self.data.append(self.manager.separateFiles["f_"+"{0:06x}".format(cacheAddr.file_number)][offset:offset+self.data_size[1]])
+        self.data.append(self.manager.separateFiles["f_"+"{0:06x}".format(cacheAddr.file_number)][0:size])
       else:
         pass
 
     self.payload = self.data[1] if len(self.data) > 1 else None
-
     if len(self.data) > 0:
         self.response_header, self.headerMap = parseHTTPHeaders(self.data[0])
 

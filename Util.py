@@ -11,18 +11,29 @@ import hashlib
 import shutil
 import logging
 
-from urllib.parse import urlparse
+import struct
+
+#from urllib.parse import urlparse
+import urlparse
 from MimeExt import *
 
 def byteToInt(b):
-  return int.from_bytes(b, byteorder='little')
+  #return int.from_bytes(b, byteorder='little')
+  if len(b) == 1:
+    return ord(struct.unpack("<c", b))[0]
+  elif len(b) == 2:
+    return struct.unpack("<h", b)[0]
+  elif len(b) == 4:
+    return struct.unpack("<i", b)[0]
+
 
 
 def isCacheInitialized(addr):
   """
     Cache address is initialized if the first bit is set
   """
-  return (int.from_bytes(addr, byteorder='little') & 0x80000000) != 0
+  #return (int.from_bytes(addr, byteorder='little') & 0x80000000) != 0
+  return (byteToInt(addr) & 0x80000000) != 0
 
 
 def readNextOneBytesAsInt(data, offset):
@@ -38,7 +49,7 @@ def readNextXBytes(data, offset, length):
   return data[offset : offset + length]
 
 def getExt(url, header):
-  path = urlparse(url)[2]
+  path = urlparse.urlparse(url)[2]
 
   contentType = None
   if header.get('Content-Type'):
