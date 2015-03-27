@@ -58,12 +58,13 @@ class CacheManager(object):
       if len(entry.response_header) <= 1:
         continue
 
-      ext = getExt(entry.key, entry.headerMap)
       url = entry.key.encode('utf-8')
+
+      ext = getExt(entry.key, entry.headerMap)
       dumper.insert(url, '\n'.join(entry.response_header), isHeader=True)
+
       if len(entry.data) > 1:
         dumper.insert(url, entry.data[1], ext=ext)
-      
 
 
   def fetchBytesForEntry(self, addr):

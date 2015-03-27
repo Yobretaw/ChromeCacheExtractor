@@ -130,7 +130,8 @@ class EntryStore(object):
 
     self.payload = self.data[1] if len(self.data) > 1 else None
 
-    self.response_header, self.headerMap = parseHTTPHeaders(self.data[0])
+    if len(self.data) > 0:
+        self.response_header, self.headerMap = parseHTTPHeaders(self.data[0])
 
   def handleLongKey(self):
     assert(self.long_key != 0)

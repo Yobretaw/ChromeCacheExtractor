@@ -22,7 +22,6 @@ def isCacheInitialized(addr):
   """
     Cache address is initialized if the first bit is set
   """
-  #return (cacheAddr[0] | cacheAddr[1]) != 0
   return (int.from_bytes(addr, byteorder='little') & 0x80000000) != 0
 
 
@@ -41,8 +40,17 @@ def readNextXBytes(data, offset, length):
 def getExt(url, header):
   path = urlparse(url)[2]
 
+  contentType = None
+  if header.get('Content-Type'):
+    contentType = header.get('Content-Type').split(";")[0]
+  elif header.get('content-type'):
+    contentType = header.get('content-type').split(";")[0]
+
   extFromUrl = path.split('.')[-1]
-  extFromMimeType = mimeToExt.get(header.get('Content-Type'))
+  extFromMimeType = mimeToExt.get(contentType)
+
+  if not extFromMimeType:
+    extFromMimeType = mimeToExt.get(contentType)
 
   if extToMime.get(extFromUrl):
     return "." + extFromUrl

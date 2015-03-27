@@ -102,7 +102,6 @@ class Block(object):
         blockIdx += 1
         offset += self.entry_size
 
-
   def getEntry(self, idx, count=1):
     return self.blocks[idx:idx+count]
 
