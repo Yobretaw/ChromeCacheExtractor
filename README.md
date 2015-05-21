@@ -1,9 +1,9 @@
 # Chrome Cache Extractor
-A utility that parses Google Chrome's cache files. Current implementation follows files saves with Chrome Disk Cache 2.x.
+A utility that parses Google Chrome's cache files. Current implementation follows Chrome Disk Cache 2.x.
 
 ## Usage
-  cd src/
-  python main.py <cache_dir> <output_dir>
+    $ cd src/
+    $ python main.py <cache_dir> <output_dir>
 
 ## Requirement
   - Python 2.7
