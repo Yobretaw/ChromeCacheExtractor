@@ -1,15 +1,8 @@
 import sys
-import struct
 import os
-import threading
-import json
-import time
-import re
 import urllib
 import uuid
 import hashlib
-import shutil
-import logging
 
 class CacheDumper(object):
     def __init__(self, pathToDir=None, overwrite=True):
