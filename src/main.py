@@ -15,8 +15,8 @@ from manager import *
 
 
 def main():
-  fromDir = "/Users/youkeshen/Desktop/Cache/"
-  toDir = "/Users/youkeshen/Desktop/Results/"
+  fromDir = sys.argv[1]
+  toDir = sys.argv[2]
 
   cm = CacheManager(fromDir, toDir)
   cm.processEntries()
