@@ -5,7 +5,7 @@ A utility that parses Google Chrome's cache files. Current implementation follow
     $ cd src/
     $ python main.py <cache_dir> <output_dir>
 
-Cache directory can be found [here](https://www.chromium.org/user-experience/user-data-directory)
+Cache directory can be found [here](https://www.chromium.org/user-experience/user-data-directory). Note the cache directory should have these files: **index**, **data_n** and **f\_xxxxxx**.
 
 ## Requirement
   - Python 2.7
