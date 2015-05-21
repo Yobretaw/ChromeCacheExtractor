@@ -1,4 +1,4 @@
-# ChromeCacheExtractor
+# Chrome Cache Extractor
 A utility that parses Google Chrome's cache files. Current implementation follows files saves with Chrome Disk Cache 2.x.
 
 ## Usage
